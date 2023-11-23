@@ -31,7 +31,7 @@ dependencies {
     // https://mvnrepository.com/artifact/software.aws.rds/aws-mysql-jdbc
     implementation group: 'software.aws.rds', name: 'aws-mysql-jdbc', version: '1.0.0'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    // implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     compileOnly 'org.projectlombok:lombok'
