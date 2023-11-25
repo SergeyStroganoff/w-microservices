@@ -1,6 +1,6 @@
 package com.stroganov.domain.dto.warehouse;
 
-import com.stroganov.warehouse.domain.dto.user.UserDTO;
+import com.stroganov.domain.dto.user.UserDTO;
 import lombok.*;
 
 import java.util.ArrayList;

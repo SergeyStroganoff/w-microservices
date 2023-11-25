@@ -1,6 +1,7 @@
 package com.stroganov.domain.model.user;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.stroganov.domain.model.warehouse.Warehouse;
 import jakarta.persistence.*;
 import lombok.*;
@@ -52,6 +53,7 @@ public class User implements UserDetails {
             name = "user_warehouse",
             joinColumns = @JoinColumn(name = "username"),
             inverseJoinColumns = @JoinColumn(name = "warehouse_id"))
+    @JsonManagedReference
     private List<Warehouse> warehouseList;
 
     @Override

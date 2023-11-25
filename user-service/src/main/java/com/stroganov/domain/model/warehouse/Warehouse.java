@@ -1,6 +1,7 @@
 package com.stroganov.domain.model.warehouse;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.stroganov.domain.model.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -40,5 +41,6 @@ public class Warehouse implements Serializable {
     //         inverseJoinColumns = @JoinColumn(name = "username"))
     @ToString.Exclude
     @ManyToMany(mappedBy = "warehouseList", fetch = FetchType.EAGER)
+    @JsonBackReference
     private List<User> userList;
 }

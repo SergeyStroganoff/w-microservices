@@ -26,6 +26,7 @@ ext {
 }
 
 dependencies {
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-config'
     // https://mvnrepository.com/artifact/software.aws.rds/aws-mysql-jdbc

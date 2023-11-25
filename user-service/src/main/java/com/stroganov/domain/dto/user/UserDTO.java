@@ -1,10 +1,6 @@
 package com.stroganov.domain.dto.user;
 
-import com.stroganov.warehouse.domain.dto.warehouse.WarehouseDTO;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
+import com.stroganov.domain.dto.warehouse.WarehouseDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,17 +13,13 @@ import java.util.*;
 @Setter
 @ToString
 public class UserDTO {
-    @Size(min = 4, max = 12, message = "Name (login) must be from 4 to 12 symbols")
+
     private String userName;
-    @Size(min = 4, max = 12, message = "Password must be from 4 to 12 symbols")
     private String password;
-    @NotBlank(message = "Full name can not be blank")
     private String fullName;
-    @Email(message = "please text correct email")
     private String email;
     private boolean enabled;
     @ToString.Exclude
-    @NotEmpty(message = "minimum one role must be chosen")
     private Set<AuthoritiesDTO> authorities = new HashSet<>();
     @ToString.Exclude
     private List<WarehouseDTO> warehouseDTOList = new ArrayList<>();
