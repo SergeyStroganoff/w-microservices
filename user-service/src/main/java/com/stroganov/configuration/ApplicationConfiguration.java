@@ -12,8 +12,8 @@ import javax.sql.DataSource;
 @Configuration
 public class ApplicationConfiguration implements WebMvcConfigurer {
 
-    @Bean
-    UserDetailsService getUserDetailsService(@Autowired DataSource dataSource) {
-        return new JdbcUserDetailsManager(dataSource);
-    }
+  @Bean
+ UserDetailsService getUserDetailsService(@Autowired DataSource dataSource) {
+     return new JdbcUserDetailsManager(dataSource);
+ }
 }
