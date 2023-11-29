@@ -26,6 +26,10 @@ ext {
 }
 
 dependencies {
+    implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.12.3'
+    // https://mvnrepository.com/artifact/org.modelmapper/modelmapper
+    implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.1.1'
+
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-config'

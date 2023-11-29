@@ -2,10 +2,10 @@ package com.stroganov.controller;
 
 import com.stroganov.domain.model.user.User;
 import com.stroganov.exception.UserNotFoundException;
-import com.stroganov.repository.UserRepository;
+import com.stroganov.service.UserService;
 import jakarta.validation.constraints.NotBlank;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,21 +20,26 @@ import java.util.Optional;
 @Validated
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    @Autowired
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
-    @GetMapping("/")
-    public Iterable<User> getUsers() {
-        return userRepository.findAll();
+    @GetMapping("/{name}")
+    public User getUserByName(@PathVariable @NotBlank String name) throws UserNotFoundException {
+        Optional<User> userOptional = userService.findUserByName(name);
+        return userOptional.orElseThrow(() -> new UserNotFoundException("User with id: " + name + " not found"));
     }
 
-    @GetMapping("/{id}")
-    public User getUserByID(@PathVariable @NotBlank String id) throws UserNotFoundException {
-        Optional<User> userOptional = userRepository.findById(id);
-        return userOptional.orElseThrow(() -> new UserNotFoundException("User with id: " + id + " not found"));
+    @GetMapping("/welcome")
+    public String welcome() {
+        return "Welcome this endpoint is not secure";
+    }
+
+    @GetMapping("/admin/adminProfile")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public String adminProfile() {
+        return "Welcome to Admin Profile";
     }
 }
