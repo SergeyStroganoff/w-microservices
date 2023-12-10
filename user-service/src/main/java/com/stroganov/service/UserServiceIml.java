@@ -3,6 +3,7 @@ package com.stroganov.service;
 import com.stroganov.domain.dto.user.UserDTO;
 import com.stroganov.domain.model.user.Authorities;
 import com.stroganov.domain.model.user.User;
+import com.stroganov.domain.model.warehouse.Warehouse;
 import com.stroganov.exception.RepositoryTransactionException;
 import com.stroganov.exception.UserNotFoundException;
 import com.stroganov.repository.UserRepository;
@@ -14,8 +15,6 @@ import org.modelmapper.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -55,7 +54,7 @@ public class UserServiceIml implements UserService, UserDetailsService {
     }
 
     @Transactional
-    public String save(UserDTO userDTO) throws RepositoryTransactionException {
+    public String save(UserDTO userDTO, int warehouseId) throws RepositoryTransactionException {
         if (userRepository.findUserByUserName(userDTO.getUserName()).isPresent()) {
             throw new ValidationException("User with the same name exists!");
         }
@@ -63,10 +62,9 @@ public class UserServiceIml implements UserService, UserDetailsService {
         String userPassword = user.getPassword();
         String encodedPassword = passwordEncoder.encode(userPassword);
         user.setPassword(encodedPassword);
-        if (user.getWarehouseList().isEmpty()) {
-            User currentAuthenticatedUser = (User) getAuthenticatedUser();
-            user.getWarehouseList().addAll(currentAuthenticatedUser.getWarehouseList());
-        }
+        Warehouse warehouse = new Warehouse();
+        warehouse.setId(warehouseId);
+        user.getWarehouseList().add(warehouse);
         try {
             user = userRepository.save(user);
         } catch (Exception e) {
@@ -93,7 +91,7 @@ public class UserServiceIml implements UserService, UserDetailsService {
     }
 
     @Transactional
-    public void delete(String userName) throws RepositoryTransactionException {
+    public String delete(String userName) throws RepositoryTransactionException {
         User user = userRepository.findUserByUserName(userName)
                 .orElseThrow(() -> new UsernameNotFoundException("User with email: " + userName + " not found !"));
         try {
@@ -102,12 +100,13 @@ public class UserServiceIml implements UserService, UserDetailsService {
             logger.error(ERROR_DELETING_USER_WITH_USER_NAME + userName, e);
             throw new RepositoryTransactionException(ERROR_DELETING_USER_WITH_USER_NAME + user.getUsername(), e);
         }
+        return userName;
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<UserDTO> getUserDTOByName(String userName) {
-        Optional<User> userOptional = userRepository.findUserByUserName(userName);
+        Optional<User> userOptional = userRepository.findById(userName);
         if (userOptional.isEmpty()) {
             return Optional.empty();
         }
@@ -117,19 +116,9 @@ public class UserServiceIml implements UserService, UserDetailsService {
 
     @Override
     public Optional<User> findUserByName(String userName) {
-        return userRepository.findUserByUserName(userName);
+        return userRepository.findById(userName);
     }
 
-    @Override
-    public Object getAuthenticatedUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            return authentication.getPrincipal();
-        } else {
-            logger.error(UNAUTHORIZED_SESSION_MESSAGE);
-            throw new RuntimeException(UNAUTHORIZED_SESSION_MESSAGE);
-        }
-    }
 
     @Override
     @Transactional

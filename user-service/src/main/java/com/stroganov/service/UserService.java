@@ -10,17 +10,15 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
-    String save(UserDTO userDTO) throws RepositoryTransactionException;
+    String save(UserDTO userDTO, int warehouseId) throws RepositoryTransactionException;
 
     void update(UserDTO userDTO) throws RepositoryTransactionException;
 
-    void delete(String userName) throws RepositoryTransactionException;
+    String delete(String userName) throws RepositoryTransactionException;
 
     Optional<UserDTO> getUserDTOByName(String userName);
 
     Optional<User> findUserByName(String userName);
-
-    Object getAuthenticatedUser();
 
     List<UserDTO> getAllConnectedUsers(String userName);
 
