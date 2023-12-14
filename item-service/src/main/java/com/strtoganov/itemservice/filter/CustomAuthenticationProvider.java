@@ -1,5 +1,6 @@
 package com.strtoganov.itemservice.filter;
 
+import com.strtoganov.itemservice.exception.jwtTokenException;
 import com.strtoganov.itemservice.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,13 +22,17 @@ public class CustomAuthenticationProvider {
         this.jwtService = jwtService;
     }
 
-    public UsernamePasswordAuthenticationToken getAuthenticationToken(String jwtToken) {
-        String username = jwtService.extractUsername(jwtToken);
-        List<String> authoritiesList = jwtService.extractAuthorities(jwtToken);
-        Collection<? extends GrantedAuthority> authorities = authoritiesList
-                .stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
-        return new UsernamePasswordAuthenticationToken(username, jwtToken, authorities);
+    public UsernamePasswordAuthenticationToken getAuthenticationToken(String jwtToken) throws jwtTokenException {
+        if (!jwtService.isTokenExpired(jwtToken)) {
+            String username = jwtService.extractUsername(jwtToken);
+            List<String> authoritiesList = jwtService.extractAuthorities(jwtToken);
+            Collection<? extends GrantedAuthority> authorities = authoritiesList
+                    .stream()
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toList());
+            return new UsernamePasswordAuthenticationToken(username, jwtToken, authorities);
+        } else {
+          throw new jwtTokenException("Token is Expired");
+        }
     }
 }
