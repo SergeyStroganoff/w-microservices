@@ -32,7 +32,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @PackagePrivate
 public class UserServiceIml implements UserService, UserDetailsService {
-    private static Logger logger = LoggerFactory.getLogger(UserServiceIml.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceIml.class);
     public static final String ERROR_DELETING_USER_WITH_USER_NAME = "Error deleting user with user name: ";
     public static final String UNAUTHORIZED_SESSION_MESSAGE = "Trying to get a user from an unauthorized session";
     private static final String USER_DOES_T_HAVE_WAREHOUSE = "User warehouse list is empty. UserName: %s";
