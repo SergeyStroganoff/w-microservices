@@ -13,7 +13,7 @@ import java.util.Optional;
 public class ItemStyleServiceImpl implements ItemStyleService {
 
     @Autowired
-    ItemStyleRepository itemStyleRepository;
+    private ItemStyleRepository itemStyleRepository;
 
     @Override
     public Optional<ItemStyle> findItemStyleByStyleArticleAndStyleName(String article, String name) {

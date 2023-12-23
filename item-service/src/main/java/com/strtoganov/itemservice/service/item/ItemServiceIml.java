@@ -39,13 +39,9 @@ public class ItemServiceIml implements ItemService {
         itemRepository.delete(item);
     }
 
-    public Optional<Item> getItemByArticleManufactureNameStyle(String modelArticle, String manufactureName, String styleArticle) {
-        return itemRepository.findByModel_ArticleAndProducer_NameAndItemStyle_StyleArticle(modelArticle, manufactureName, styleArticle);
-    }
-
-    public Optional<Integer> getItemIdByArticleManufactureNameStyle(String modelArticle, String manufactureName, String styleArticle) {
-        Integer itemID = itemRepository.findItemIdsByModelNameAndStyleArticle(modelArticle, manufactureName, styleArticle);
-        return Optional.ofNullable(itemID);
+    @Override
+    public Optional<Integer> findItemIdByModelNameAndStyleArticle(String article, String producerName, String styleArticle) {
+        return Optional.ofNullable(itemRepository.findItemIdsByModelNameAndStyleArticle(article, producerName, styleArticle));
     }
 
     @Override
@@ -95,11 +91,6 @@ public class ItemServiceIml implements ItemService {
                 article, producerName, styleArticle);
     }
 
-    @Override
-    public Optional<Integer> findItemIdByModelNameAndStyleArticle(String article, String producerName, String styleArticle) {
-        return Optional.ofNullable(itemRepository.findItemIdsByModelNameAndStyleArticle(article, producerName, styleArticle));
-    }
-
     private void removeItemsIfPresentInDB(Set<Item> itemSet) {
         Iterator<Item> itemIterator = itemSet.iterator();
         while (itemIterator.hasNext()) {
@@ -109,20 +100,6 @@ public class ItemServiceIml implements ItemService {
                     currentItem.getProducer().getName(),
                     currentItem.getItemStyle().getStyleArticle());
             if (isItemPresent) {
-                itemIterator.remove();
-            }
-        }
-    }
-
-    private void removeItemsIfPresentInDB_V2(Set<Item> itemSet) {
-        Iterator<Item> itemIterator = itemSet.iterator();
-        while (itemIterator.hasNext()) {
-            Item currentItem = itemIterator.next();
-            Optional<Integer> currentOptionalItem = getItemIdByArticleManufactureNameStyle(  //getItemByArticleManufactureNameStyle
-                    currentItem.getModel().getArticle(),
-                    currentItem.getProducer().getName(),
-                    currentItem.getItemStyle().getStyleArticle());
-            if (currentOptionalItem.isPresent()) {
                 itemIterator.remove();
             }
         }

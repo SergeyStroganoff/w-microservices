@@ -23,13 +23,13 @@ public class CustomAuthenticationProvider {
     }
 
     public UsernamePasswordAuthenticationToken getAuthenticationToken(String jwtToken) throws jwtTokenException {
-        if (!jwtService.isTokenExpired(jwtToken)) {
+        if (Boolean.FALSE.equals(jwtService.isTokenExpired(jwtToken))) {
             String username = jwtService.extractUsername(jwtToken);
             List<String> authoritiesList = jwtService.extractAuthorities(jwtToken);
             Collection<? extends GrantedAuthority> authorities = authoritiesList
                     .stream()
                     .map(SimpleGrantedAuthority::new)
-                    .collect(Collectors.toList());
+                    .toList();
             return new UsernamePasswordAuthenticationToken(username, jwtToken, authorities);
         } else {
           throw new jwtTokenException("Token is Expired");

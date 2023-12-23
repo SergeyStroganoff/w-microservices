@@ -15,7 +15,7 @@ import java.util.Optional;
 @Setter
 public class AlternativeArticlesServiceImpl implements AlternativeArticlesService {
     @Autowired
-    AlternativeArticlesRepository alternativeArticlesRepository;
+    private AlternativeArticlesRepository alternativeArticlesRepository;
 
     @Override
     public Optional<AlternativeArticles> fiendByID(String articleString) {
