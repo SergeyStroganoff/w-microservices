@@ -54,7 +54,7 @@ public class UserServiceIml implements UserService, UserDetailsService {
     }
 
     @Transactional
-    public String save(UserDTO userDTO, int warehouseId) throws RepositoryTransactionException {
+    public String save(UserDTO userDTO, int warehouseId) throws RepositoryTransactionException { //todo
         if (userRepository.findUserByUserName(userDTO.getUserName()).isPresent()) {
             throw new ValidationException("User with the same name exists!");
         }

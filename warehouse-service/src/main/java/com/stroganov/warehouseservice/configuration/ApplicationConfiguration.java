@@ -1,4 +1,4 @@
-package com.strtoganov.itemservice.configuration;
+package com.stroganov.warehouseservice.configuration;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;

@@ -1,4 +1,4 @@
-package com.strtoganov.itemservice.exception;
+package com.stroganov.warehouseservice.exception;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,5 +24,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             Exception ex, WebRequest request) {
         return new ResponseEntity<>(
                 "Transaction failed: " + ex.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler({jwtTokenException.class})
+    public ResponseEntity<Object> handleJWTTokenExceptionTransactionException(
+            Exception ex, WebRequest request) {
+        return new ResponseEntity<>(
+                "jwt token exception: " + ex.getMessage(), new HttpHeaders(), HttpStatus.FORBIDDEN);
     }
 }

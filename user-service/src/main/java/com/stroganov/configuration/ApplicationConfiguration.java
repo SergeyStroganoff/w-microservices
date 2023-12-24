@@ -20,10 +20,6 @@ public class ApplicationConfiguration implements WebMvcConfigurer {
         return new BCryptPasswordEncoder();
     }
 
-    //  @Bean
-            //  UserDetailsService getUserDetailsService(@Autowired DataSource dataSource) {
-        //      return new JdbcUserDetailsManager(dataSource);
-        //  }
 
     @Bean
     @Primary

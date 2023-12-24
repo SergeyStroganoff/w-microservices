@@ -1,15 +1,13 @@
-package com.stroganov.domain.model.warehouse;
+package com.stroganov.warehouseservice.model.warehouse;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.stroganov.domain.model.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.io.Serializable;
-import java.util.List;
+
 
 @Entity
 @Table
@@ -31,9 +29,4 @@ public class Warehouse implements Serializable {
 
     @Column
     private String address;
-
-    @ToString.Exclude
-    @ManyToMany(mappedBy = "warehouseList", fetch = FetchType.EAGER)
-    @JsonBackReference
-    private List<User> userList;
 }

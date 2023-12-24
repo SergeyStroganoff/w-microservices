@@ -2,6 +2,7 @@ package com.strtoganov.itemservice.controller;
 
 import com.strtoganov.itemservice.domain.model.item.Item;
 import com.strtoganov.itemservice.service.item.ItemService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+@Tag(name = "Item Controller", description = "Item management APIs")
 @RestController
 @RequestMapping("/api/items")
 @NoArgsConstructor

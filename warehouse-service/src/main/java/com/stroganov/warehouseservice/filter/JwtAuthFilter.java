@@ -1,6 +1,7 @@
-package com.strtoganov.itemservice.filter;
+package com.stroganov.warehouseservice.filter;
 
-import com.strtoganov.itemservice.exception.jwtTokenException;
+
+import com.stroganov.warehouseservice.exception.jwtTokenException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
