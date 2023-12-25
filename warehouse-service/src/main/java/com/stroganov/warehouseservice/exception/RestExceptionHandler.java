@@ -32,4 +32,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(
                 "jwt token exception: " + ex.getMessage(), new HttpHeaders(), HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler({NotFoundException.class})
+    public ResponseEntity<Object> handleNotFoundException(Exception ex, WebRequest request) {
+        return new ResponseEntity<>(
+                "Exception: " + ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND);
+    }
 }
