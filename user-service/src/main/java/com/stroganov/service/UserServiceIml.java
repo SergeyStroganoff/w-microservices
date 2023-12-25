@@ -4,10 +4,11 @@ import com.stroganov.domain.dto.user.UserDTO;
 import com.stroganov.domain.model.user.Authorities;
 import com.stroganov.domain.model.user.User;
 import com.stroganov.domain.model.warehouse.Warehouse;
+import com.stroganov.exception.MicroserviceCommunicationException;
 import com.stroganov.exception.RepositoryTransactionException;
+import com.stroganov.exception.ServiceValidationException;
 import com.stroganov.exception.UserNotFoundException;
 import com.stroganov.repository.UserRepository;
-import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.PackagePrivate;
 import org.modelmapper.ModelMapper;
@@ -43,6 +44,9 @@ public class UserServiceIml implements UserService, UserDetailsService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private WarehouseService warehouseService;
+
     @Override
     @Transactional(readOnly = true)
     /**
@@ -54,9 +58,12 @@ public class UserServiceIml implements UserService, UserDetailsService {
     }
 
     @Transactional
-    public String save(UserDTO userDTO, int warehouseId) throws RepositoryTransactionException { //todo
+    public String save(UserDTO userDTO, int warehouseId) throws RepositoryTransactionException, ServiceValidationException, MicroserviceCommunicationException {
         if (userRepository.findUserByUserName(userDTO.getUserName()).isPresent()) {
-            throw new ValidationException("User with the same name exists!");
+            throw new ServiceValidationException("User with the same name exists!");
+        }
+        if (!warehouseService.warehouseExist(warehouseId)) {
+            throw new ServiceValidationException("warehouse id is not valid");
         }
         User user = modelMapper.map(userDTO, User.class);
         String userPassword = user.getPassword();

@@ -18,7 +18,7 @@ public class WarehouseServiceRestTemplateImpl implements WarehouseService {
 
 
     @Override
-    public boolean WarehouseExist(int id) throws MicroserviceCommunicationException {
+    public boolean warehouseExist(int id) throws MicroserviceCommunicationException {
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<Integer> request = new HttpEntity<>(id);
         ResponseEntity<Warehouse> responseEntity ;

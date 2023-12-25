@@ -2,7 +2,9 @@ package com.stroganov.controller;
 
 import com.stroganov.domain.dto.user.UserDTO;
 import com.stroganov.domain.model.user.User;
+import com.stroganov.exception.MicroserviceCommunicationException;
 import com.stroganov.exception.RepositoryTransactionException;
+import com.stroganov.exception.ServiceValidationException;
 import com.stroganov.exception.UserNotFoundException;
 import com.stroganov.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,7 +42,7 @@ public class UserController {
 
     @PostMapping("/{warehouseId}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public String saveNewUser(@PathVariable int warehouseId, @RequestBody UserDTO userDTO) throws RepositoryTransactionException {
+    public String saveNewUser(@PathVariable int warehouseId, @RequestBody UserDTO userDTO) throws RepositoryTransactionException, ServiceValidationException, MicroserviceCommunicationException {
         return userService.save(userDTO, warehouseId);
     }
 

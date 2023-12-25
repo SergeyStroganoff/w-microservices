@@ -39,7 +39,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 "Exception: " + ex.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({NotFoundException.class})
+    @ExceptionHandler({MicroserviceCommunicationException.class})
     public ResponseEntity<Object> handleMicroserviceCommunicationException(Exception ex, WebRequest request) {
         return new ResponseEntity<>(
                 "Server Error: " + ex.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);

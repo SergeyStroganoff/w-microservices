@@ -1,5 +1,6 @@
 package com.stroganov.exception;
 
+import org.modelmapper.ValidationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,5 +33,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             Exception ex, WebRequest request) {
         return new ResponseEntity<>(
                 "Transaction failed: " + ex.getMessage(), new HttpHeaders(), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler({MicroserviceCommunicationException.class})
+    public ResponseEntity<Object> handleMicroserviceCommunicationException(Exception ex, WebRequest request) {
+        return new ResponseEntity<>(
+                "Server Error: " + ex.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler({ValidationException.class})
+    public ResponseEntity<Object> handleValidationException(Exception ex, WebRequest request) {
+        return new ResponseEntity<>(
+                "Bad Request: " + ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 }
