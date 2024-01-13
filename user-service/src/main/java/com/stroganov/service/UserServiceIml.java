@@ -23,10 +23,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Transactional
@@ -58,14 +55,17 @@ public class UserServiceIml implements UserService, UserDetailsService {
     }
 
     @Transactional
-    public String save(UserDTO userDTO, int warehouseId) throws RepositoryTransactionException, ServiceValidationException, MicroserviceCommunicationException {
-        if (userRepository.findUserByUserName(userDTO.getUserName()).isPresent()) {
+    public String save(UserDTO userDTO, int warehouseId, String token) throws RepositoryTransactionException, ServiceValidationException, MicroserviceCommunicationException {
+        if (userRepository.findUserByUserName(userDTO.getUserName()).isPresent()) { // TODO
             throw new ServiceValidationException("User with the same name exists!");
         }
-        if (!warehouseService.warehouseExist(warehouseId)) {
+        if (!warehouseService.warehouseExist(warehouseId, token)) {
             throw new ServiceValidationException("warehouse id is not valid");
         }
         User user = modelMapper.map(userDTO, User.class);
+        if (user.getWarehouseList() == null) {
+            user.setWarehouseList(new ArrayList<>());
+        }
         String userPassword = user.getPassword();
         String encodedPassword = passwordEncoder.encode(userPassword);
         user.setPassword(encodedPassword);

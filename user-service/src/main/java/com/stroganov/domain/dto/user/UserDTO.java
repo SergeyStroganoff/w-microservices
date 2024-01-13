@@ -21,8 +21,9 @@ public class UserDTO {
     private boolean enabled;
     @ToString.Exclude
     private Set<AuthoritiesDTO> authorities = new HashSet<>();
-    @ToString.Exclude
-    private List<WarehouseDTO> warehouseDTOList = new ArrayList<>();
+
+  //  @ToString.Exclude
+  //  private List<WarehouseDTO> warehouseDTOList = new ArrayList<>();
 
     public UserDTO(String userName, String password, String fullName, String email, boolean enabled) {
         this.userName = userName;
@@ -36,13 +37,13 @@ public class UserDTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof UserDTO userDTO)) return false;
+
         if (enabled != userDTO.enabled) return false;
         if (!Objects.equals(userName, userDTO.userName)) return false;
         if (!Objects.equals(password, userDTO.password)) return false;
         if (!Objects.equals(fullName, userDTO.fullName)) return false;
         if (!Objects.equals(email, userDTO.email)) return false;
-        if (!Objects.equals(authorities, userDTO.authorities)) return false;
-        return Objects.equals(warehouseDTOList, userDTO.warehouseDTOList);
+        return Objects.equals(authorities, userDTO.authorities);
     }
 
     @Override
@@ -53,7 +54,6 @@ public class UserDTO {
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (enabled ? 1 : 0);
         result = 31 * result + (authorities != null ? authorities.hashCode() : 0);
-        result = 31 * result + (warehouseDTOList != null ? warehouseDTOList.hashCode() : 0);
         return result;
     }
 }

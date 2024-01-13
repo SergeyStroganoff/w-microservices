@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
-    String save(UserDTO userDTO, int warehouseId) throws RepositoryTransactionException, ServiceValidationException, MicroserviceCommunicationException;
+    String save(UserDTO userDTO, int warehouseId, String jwtToken) throws RepositoryTransactionException, ServiceValidationException, MicroserviceCommunicationException;
 
     void update(UserDTO userDTO) throws RepositoryTransactionException;
 

@@ -32,7 +32,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleRepositoryTransactionException(
             Exception ex, WebRequest request) {
         return new ResponseEntity<>(
-                "Transaction failed: " + ex.getMessage(), new HttpHeaders(), HttpStatus.FORBIDDEN);
+                "Transaction failed: " + ex.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler({MicroserviceCommunicationException.class})

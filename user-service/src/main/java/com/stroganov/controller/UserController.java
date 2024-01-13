@@ -1,5 +1,6 @@
 package com.stroganov.controller;
 
+import com.stroganov.domain.dto.user.AuthoritiesDTO;
 import com.stroganov.domain.dto.user.UserDTO;
 import com.stroganov.domain.model.user.User;
 import com.stroganov.exception.MicroserviceCommunicationException;
@@ -41,9 +42,9 @@ public class UserController {
     }
 
     @PostMapping("/{warehouseId}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public String saveNewUser(@PathVariable int warehouseId, @RequestBody UserDTO userDTO) throws RepositoryTransactionException, ServiceValidationException, MicroserviceCommunicationException {
-        return userService.save(userDTO, warehouseId);
+    //@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public String saveNewUser(@RequestHeader("Authorization") String authorizationHeader, @PathVariable int warehouseId, @RequestBody UserDTO userDTO) throws RepositoryTransactionException, ServiceValidationException, MicroserviceCommunicationException {
+         return userService.save(userDTO, warehouseId, authorizationHeader);
     }
 
     @DeleteMapping("/{name}")

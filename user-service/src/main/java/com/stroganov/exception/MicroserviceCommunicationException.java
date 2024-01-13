@@ -8,4 +8,8 @@ public class MicroserviceCommunicationException extends Exception {
     public MicroserviceCommunicationException(String message) {
         super(message);
     }
+
+    public MicroserviceCommunicationException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }
