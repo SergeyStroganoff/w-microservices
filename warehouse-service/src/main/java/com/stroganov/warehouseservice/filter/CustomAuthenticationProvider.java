@@ -15,9 +15,9 @@ import java.util.List;
 @Component
 public class CustomAuthenticationProvider {
 
-    private final JwtService jwtService;
-
     @Autowired
+    private  JwtService jwtService;
+
     public CustomAuthenticationProvider(JwtService jwtService) {
         this.jwtService = jwtService;
     }

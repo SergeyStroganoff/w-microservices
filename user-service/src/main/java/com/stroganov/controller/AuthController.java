@@ -30,7 +30,7 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
 
-    UserService userService;
+    private UserService userService;
 
     @Autowired
     public AuthController(JwtService jwtService, AuthenticationManager authenticationManager) {
@@ -42,8 +42,7 @@ public class AuthController {
     public String authenticateAndGetToken(@RequestBody UserAuthorizationRequest authRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         if (authentication.isAuthenticated()) {
-            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-           // return jwtService.generateToken(authRequest.getUsername());
+          //  Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
            return jwtService.generateToken(authRequest.getUsername(),authentication.getAuthorities());
         } else {
             throw new UsernameNotFoundException("invalid user request !");

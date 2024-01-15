@@ -32,8 +32,4 @@ public class Warehouse implements Serializable {
     @Column
     private String address;
 
-    @ToString.Exclude
-    @ManyToMany(mappedBy = "warehouseList", fetch = FetchType.EAGER)
-    @JsonBackReference
-    private List<User> userList;
 }

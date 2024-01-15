@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Tag(name = "User Controller", description = "User management APIs")
@@ -34,6 +35,11 @@ public class UserController {
     public User getUserByName(@PathVariable @NotBlank String name) throws UserNotFoundException {
         Optional<User> userOptional = userService.findUserByName(name);
         return userOptional.orElseThrow(() -> new UserNotFoundException("User with id: " + name + " not found"));
+    }
+
+    @GetMapping("/same/{name}")
+    public List<UserDTO> getUsersWithSameWarehouses(@PathVariable @NotBlank String name)  {
+        return userService.getAllConnectedUsers(name);
     }
 
     @GetMapping("/welcome")

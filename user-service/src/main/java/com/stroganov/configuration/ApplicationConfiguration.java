@@ -1,5 +1,6 @@
 package com.stroganov.configuration;
 
+import org.hibernate.SessionFactory;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;

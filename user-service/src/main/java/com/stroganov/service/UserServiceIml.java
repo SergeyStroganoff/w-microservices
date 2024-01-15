@@ -9,13 +9,17 @@ import com.stroganov.exception.RepositoryTransactionException;
 import com.stroganov.exception.ServiceValidationException;
 import com.stroganov.exception.UserNotFoundException;
 import com.stroganov.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.PackagePrivate;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,22 +31,30 @@ import java.util.*;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 @PackagePrivate
 public class UserServiceIml implements UserService, UserDetailsService {
     private static final Logger logger = LoggerFactory.getLogger(UserServiceIml.class);
     public static final String ERROR_DELETING_USER_WITH_USER_NAME = "Error deleting user with user name: ";
-    public static final String UNAUTHORIZED_SESSION_MESSAGE = "Trying to get a user from an unauthorized session";
     private static final String USER_DOES_T_HAVE_WAREHOUSE = "User warehouse list is empty. UserName: %s";
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
+    @Qualifier("webservice-client")
     private WarehouseService warehouseService;
+
+    @Autowired
+    // SessionFactory is used to get a session from the database - see nativeSQLGetUserByWarehouseIdQuery method
+    private SessionFactory sessionFactory;
+
+    public UserServiceIml() {
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -129,20 +141,28 @@ public class UserServiceIml implements UserService, UserDetailsService {
 
     @Override
     @Transactional
+    /**
+     * This method is used to get all users (except user with userName)
+     * from the database
+     * with the same warehouses as the user with the userName
+     */
     public List<UserDTO> getAllConnectedUsers(String userName) {
         Optional<User> userOptional = userRepository.findUserByUserName(userName);
         if (userOptional.isEmpty()) {
-            logger.error("There is no user: " + userName + " in database, - it is unlivable!");
-            throw new RuntimeException("There is no user: " + userName + " in database");
+            String message = String.format("There is no user: %s in database", userName);
+            logger.error(message);
+            throw new UsernameNotFoundException("There is no user: " + userName + " in database");
         }
         User userFromDataBase = userOptional.get();
         if (userFromDataBase.getWarehouseList().isEmpty()) {
-            logger.warn(USER_DOES_T_HAVE_WAREHOUSE, userFromDataBase);
+            logger.warn(USER_DOES_T_HAVE_WAREHOUSE);
             return Collections.emptyList();
         }
-
-        List<User> userList = userFromDataBase.getWarehouseList().stream()
-                .flatMap(x -> x.getUserList().stream()).toList();
+        List<String> userNameList = userFromDataBase.getWarehouseList().stream()
+                .flatMap(x -> nativeSQLGetUserByWarehouseIdQuery(x.getId()).stream()).toList();
+        List<User> userList = userRepository.findAllById(userNameList);
+        // List<User> userList = userFromDataBase.getWarehouseList().stream()
+        // .flatMap(x -> x.getUserList().stream()).toList();
         List<UserDTO> userDTOList = modelMapper.map(userList, new TypeToken<List<UserDTO>>() {
         }.getType());
         return userDTOList.stream().filter(x -> !x.getUserName().equals(userName)).toList();
@@ -155,5 +175,29 @@ public class UserServiceIml implements UserService, UserDetailsService {
                 .orElseThrow(() -> new UserNotFoundException("User with email: " + userName + " not found !"));
         user.setEnabled(!user.isEnabled());
         userRepository.flush();
+    }
+
+    private List<String> nativeSQLGetUserByWarehouseIdQuery(int warehouseId) {
+        List<String> userNameList = new ArrayList<>();
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = null;
+            try {
+                transaction = session.beginTransaction();
+
+                String sqlQuery = "SELECT username FROM user_warehouse WHERE warehouse_id = :warehouseId";
+                Query<String> query = session.createNativeQuery(sqlQuery, String.class)
+                        .setParameter("warehouseId", warehouseId);
+                // Execute the query
+                userNameList = query.list();
+
+                transaction.commit();
+            } catch (Exception e) {
+                if (transaction != null && transaction.isActive()) {
+                    transaction.rollback();
+                }
+                e.printStackTrace();
+            }
+        }
+        return userNameList;
     }
 }

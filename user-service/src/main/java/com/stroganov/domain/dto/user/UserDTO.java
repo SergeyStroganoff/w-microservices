@@ -1,12 +1,13 @@
 package com.stroganov.domain.dto.user;
 
-import com.stroganov.domain.dto.warehouse.WarehouseDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @NoArgsConstructor
 @Getter
@@ -22,8 +23,6 @@ public class UserDTO {
     @ToString.Exclude
     private Set<AuthoritiesDTO> authorities = new HashSet<>();
 
-  //  @ToString.Exclude
-  //  private List<WarehouseDTO> warehouseDTOList = new ArrayList<>();
 
     public UserDTO(String userName, String password, String fullName, String email, boolean enabled) {
         this.userName = userName;
