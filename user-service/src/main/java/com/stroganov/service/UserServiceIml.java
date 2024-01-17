@@ -46,7 +46,7 @@ public class UserServiceIml implements UserService, UserDetailsService {
     private ModelMapper modelMapper;
 
     @Autowired
-    @Qualifier("webservice-client")
+    @Qualifier("feign-client")
     private WarehouseService warehouseService;
 
     @Autowired

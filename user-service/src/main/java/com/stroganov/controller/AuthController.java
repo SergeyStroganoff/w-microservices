@@ -27,10 +27,7 @@ import java.util.Collection;
 public class AuthController {
 
     private final JwtService jwtService;
-
     private final AuthenticationManager authenticationManager;
-
-    private UserService userService;
 
     @Autowired
     public AuthController(JwtService jwtService, AuthenticationManager authenticationManager) {

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-@Component("rest-service")
+@Component("rest-client")
 public class WarehouseServiceRestTemplateImpl implements WarehouseService {
 
     private final Logger logger = LoggerFactory.getLogger(WarehouseServiceRestTemplateImpl.class);
