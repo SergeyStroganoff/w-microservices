@@ -12,7 +12,8 @@ public class WarehouseServiceFeign implements WarehouseService {
     private final WarehouseFeignClient warehouseFeignClient;
 
     @Autowired
-    public WarehouseServiceFeign(WarehouseFeignClient warehouseFeignClient) {
+
+    public WarehouseServiceFeign(WarehouseFeignClient  warehouseFeignClient) {
         this.warehouseFeignClient = warehouseFeignClient;
     }
 

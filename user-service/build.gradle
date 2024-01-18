@@ -25,6 +25,8 @@ ext {
     set('springCloudVersion', "2022.0.4")
 }
 dependencies {
+    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-circuitbreaker-resilience4j
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-circuitbreaker-resilience4j', version: '1.0.0.RELEASE'
     // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-feign
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-feign', version: '1.4.7.RELEASE'
 

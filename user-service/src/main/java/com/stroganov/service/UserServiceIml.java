@@ -72,7 +72,7 @@ public class UserServiceIml implements UserService, UserDetailsService {
             throw new ServiceValidationException("User with the same name exists!");
         }
         if (!warehouseService.warehouseExist(warehouseId, token)) {
-            throw new ServiceValidationException("warehouse id is not valid");
+            throw new ServiceValidationException("warehouse id is not valid or warehouse-service is not available");
         }
         User user = modelMapper.map(userDTO, User.class);
         if (user.getWarehouseList() == null) {
