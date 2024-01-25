@@ -1,9 +1,13 @@
 rootProject.name = 'w-microservices'
+include 'admin-server'
 include 'api-gateway'
 include 'cofig-server'
 include 'eureka-server'
 include 'user-service'
 include 'item-service'
+include 'logging'
+include 'warehouse-service'
+
 
 
 

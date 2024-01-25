@@ -26,6 +26,9 @@ ext {
 }
 
 dependencies {
+    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-stream-rabbit
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-stream-rabbit', version: '4.1.0'
+
 // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.2.0'
     implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.12.3'
