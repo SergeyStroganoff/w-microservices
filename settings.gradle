@@ -4,9 +4,9 @@ include 'api-gateway'
 include 'config-server'
 include 'eureka-server'
 include 'item-service'
-include 'logging'
 include 'user-service'
 include 'warehouse-service'
+include 'logging-service'
 
 
 
