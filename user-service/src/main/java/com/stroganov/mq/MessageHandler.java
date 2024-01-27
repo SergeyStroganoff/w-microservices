@@ -7,6 +7,8 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Sinks;
 
+import java.util.Map;
+
 @Service
 @Getter
 public class MessageHandler {
@@ -19,7 +21,7 @@ public class MessageHandler {
     }
 
     public void sendMessage(String message) {
-        MessageHeaders headers = new MessageHeaders(null);
+        MessageHeaders headers = new MessageHeaders(Map.of("header", "value"));
         messageBrokerConfig.getInnerBusSink().emitNext(MessageBuilder.createMessage(message,headers), Sinks.EmitFailureHandler.FAIL_FAST);
         System.out.println("Message sent: " + message);
     }

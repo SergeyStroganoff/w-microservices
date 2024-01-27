@@ -1,12 +1,12 @@
 package com.stroganov.controller;
 
-import com.stroganov.domain.dto.user.AuthoritiesDTO;
 import com.stroganov.domain.dto.user.UserDTO;
 import com.stroganov.domain.model.user.User;
 import com.stroganov.exception.MicroserviceCommunicationException;
 import com.stroganov.exception.RepositoryTransactionException;
 import com.stroganov.exception.ServiceValidationException;
 import com.stroganov.exception.UserNotFoundException;
+import com.stroganov.mq.MessageHandler;
 import com.stroganov.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
@@ -27,8 +27,11 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    private final MessageHandler messageHandler;
+
+    public UserController(UserService userService, MessageHandler messageHandler) {
         this.userService = userService;
+        this.messageHandler = messageHandler;
     }
 
     @GetMapping("/{name}")
@@ -44,6 +47,8 @@ public class UserController {
 
     @GetMapping("/welcome")
     public String welcome() {
+        messageHandler.sendMessage("Welcome to the user API");
+        System.out.println("Message sent: Welcome to the user API");
         return "Welcome to the user API";
     }
 
